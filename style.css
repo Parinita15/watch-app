@@ -264,3 +264,23 @@ button:hover {
         font-size: 26px !important;
     }
 }
+/* 📱 Mobile Center Fix */
+@media screen and (max-width: 768px) {
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .card {
+        width: 95vw !important;
+        margin: 0 auto !important;
+        text-align: center;
+    }
+
+    .buttons {
+        justify-content: center !important;
+    }
+}
