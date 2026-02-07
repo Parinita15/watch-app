@@ -188,40 +188,47 @@ button:hover {
     cursor: pointer;
     opacity: 0.7;
 }
-/* 📱 Mobile Optimization */
+/* 📱 Strong Mobile Scaling */
 @media (max-width: 768px) {
 
     body {
-        padding: 10px;
+        padding: 15px;
     }
 
+    /* Watch card */
     .card {
-        width: 95%;
-        max-width: 400px;
+        width: 100%;
+        max-width: 95vw;
         margin: auto;
+        padding: 15px;
     }
 
+    /* Watch image */
     .card img {
         width: 100%;
         height: auto;
-        border-radius: 15px;
+        border-radius: 20px;
     }
 
+    /* Brand + model text */
+    .card h2 {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+    /* Button container */
     .buttons {
         display: flex;
-        justify-content: space-around;
-        margin-top: 20px;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 25px;
     }
 
+    /* ACTUAL BUTTONS */
     button {
-        font-size: 18px;
-        padding: 14px 20px;
-        border-radius: 12px;
-        width: 40%;
-    }
-
-    h1, h2 {
-        font-size: 1.5rem;
-        text-align: center;
+        font-size: 22px;
+        padding: 18px;
+        width: 48%;
+        border-radius: 15px;
     }
 }
