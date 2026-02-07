@@ -232,3 +232,35 @@ button:hover {
         border-radius: 15px;
     }
 }
+/* 🔥 FORCE LARGE MOBILE LAYOUT */
+@media screen and (max-width: 768px) {
+
+    .card {
+        width: 95vw !important;
+        max-width: none !important;
+        padding: 20px !important;
+    }
+
+    .card img {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .buttons {
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 20px !important;
+        margin-top: 30px !important;
+    }
+
+    button {
+        font-size: 24px !important;
+        padding: 22px !important;
+        width: 48% !important;
+        border-radius: 18px !important;
+    }
+
+    .card h2 {
+        font-size: 26px !important;
+    }
+}
