@@ -99,12 +99,19 @@ function showWatch() {
 function skipWatch() { currentWatch++; showWatch(); }
 function saveCurrentWatch() {
     const w = watches[currentWatch];
+
+    // Save watch if not already saved
     if (!savedWatches.find(w2 => w2.brand === w.brand && w2.model === w.model)) {
         savedWatches.push(w);
         localStorage.setItem("savedWatches", JSON.stringify(savedWatches));
         renderSavedWatches();
     }
+
+    // Move to next watch automatically
+    currentWatch++;
+    showWatch();
 }
+
 
 /* =========================
    RENDER SAVED WATCHES
@@ -208,29 +215,41 @@ function renderLinks() {
     list.innerHTML = "";
 
     links.forEach((link, index) => {
+
         const li = document.createElement("li");
+
         const a = document.createElement("a");
         a.href = link.url;
         a.target = "_blank";
         a.textContent = link.title;
+
         li.appendChild(a);
 
-        // Only allow deletion if not permanent
-        if (link.title !== "Chrono24" && link.title !== "WatchBox") {
+        // Delete button (only for user links)
+        if (!permanentLinks.find(p => p.title === link.title && p.url === link.url)) {
+
             const delBtn = document.createElement("button");
             delBtn.textContent = "🗑️";
-            delBtn.style.marginLeft = "8px";
+            delBtn.className = "delete-link-btn";
+
             delBtn.onclick = () => {
                 links.splice(index, 1);
-                localStorage.setItem("watchAppLinks", JSON.stringify(links));
+
+                const userLinks = links.filter(l =>
+                    !permanentLinks.find(p => p.title === l.title && p.url === l.url)
+                );
+
+                localStorage.setItem("watchAppLinks", JSON.stringify(userLinks));
                 renderLinks();
             };
+
             li.appendChild(delBtn);
         }
 
         list.appendChild(li);
     });
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     // Load saved links from localStorage OR initialize permanent links
