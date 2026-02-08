@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +9,17 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 </head>
+<div class="bottom-nav">
+    <button onclick="showView('homeView')">🏠</button>
+    <button onclick="showView('notesView')">📝</button>
+    <button onclick="showView('linksView')">🔗</button>
+</div>
+
 <body>
 
 <h1>Welcome, Richard! Your Personal Watch Collection</h1>
-
+<div id="homeView" class="view active">
+    <!-- YOUR EXISTING CARD / BUTTON CODE STAYS HERE -->
 <!-- Watch Card -->
 <div class="card">
     <img id="watchImage">
@@ -47,6 +55,7 @@
         Loading…
     </iframe>
 </div>
+</div>
 
 
 <!-- Libraries -->
@@ -58,3 +67,23 @@
 
 </body>
 </html>
+
+<div id="notesView" class="view">
+    <h2>Collector Notes</h2>
+
+    <textarea id="noteInput" placeholder="Write a note..."></textarea>
+    <button onclick="saveNote()">Save Note</button>
+
+    <ul id="notesList"></ul>
+</div>
+
+<div id="linksView" class="view">
+    <h2>Quick Links</h2>
+
+    <input id="linkTitle" placeholder="Link name">
+    <input id="linkURL" placeholder="https://">
+    <button onclick="saveLink()">Save Link</button>
+
+    <ul id="linksList"></ul>
+</div>
+

@@ -284,3 +284,31 @@ button:hover {
         justify-content: center !important;
     }
 }
+.view {
+    display: none;
+    padding-bottom: 80px;
+}
+
+.view.active {
+    display: block;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    border-top: 1px solid #333;
+}
+
+.bottom-nav button {
+    background: none;
+    border: none;
+    color: silver;
+    font-size: 24px;
+}

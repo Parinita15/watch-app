@@ -288,3 +288,74 @@ if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("service-worker.js");
     });
 }
+function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => {
+        v.classList.remove('active');
+    });
+    document.getElementById(viewId).classList.add('active');
+}
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+function saveNote() {
+    const text = document.getElementById("noteInput").value;
+    if (!text) return;
+
+    notes.push(text);
+    localStorage.setItem("notes", JSON.stringify(notes));
+    document.getElementById("noteInput").value = "";
+    renderNotes();
+}
+
+function renderNotes() {
+    const list = document.getElementById("notesList");
+    list.innerHTML = "";
+
+    notes.forEach((note, index) => {
+        const li = document.createElement("li");
+        li.textContent = note;
+
+        li.onclick = () => {
+            notes.splice(index, 1);
+            localStorage.setItem("notes", JSON.stringify(notes));
+            renderNotes();
+        };
+
+        list.appendChild(li);
+    });
+}
+
+renderNotes();
+let links = JSON.parse(localStorage.getItem("links")) || [];
+
+function saveLink() {
+    const title = document.getElementById("linkTitle").value;
+    const url = document.getElementById("linkURL").value;
+    if (!title || !url) return;
+
+    links.push({ title, url });
+    localStorage.setItem("links", JSON.stringify(links));
+    renderLinks();
+
+    document.getElementById("linkTitle").value = "";
+    document.getElementById("linkURL").value = "";
+}
+
+function renderLinks() {
+    const list = document.getElementById("linksList");
+    list.innerHTML = "";
+
+    links.forEach((link, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${link.url}" target="_blank">${link.title}</a>`;
+
+        li.onclick = () => {
+            links.splice(index, 1);
+            localStorage.setItem("links", JSON.stringify(links));
+            renderLinks();
+        };
+
+        list.appendChild(li);
+    });
+}
+
+renderLinks();
