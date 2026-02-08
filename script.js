@@ -8,12 +8,6 @@ function showView(viewId) {
 }
 
 // 🔒 Permanent Quick Links
-const permanentLinks = [
-    { title: "Chrono24", url: "https://www.chrono24.com" },
-    { title: "Jewelers Exchage", url: "https://jewelryexchange.com/product-category/watches/" },
-    { title: "Ebay", url: "https://www.ebay.com/b/Luxury-Watches/31387/bn_36841947" },
-    { title: "Sammy's IG Page", url: "https://www.instagram.com/watchadandco/?hl=en" }
-];
 
 // =====================
 // Personalized Watches
@@ -275,13 +269,24 @@ function renderNotes() {
 /* =========================
    QUICK LINKS
 ========================= */
+/* =========================
+   QUICK LINKS
+========================= */
 let links = JSON.parse(localStorage.getItem("watchAppLinks")) || [];
+
+// Permanent links (always shown at top)
+const permanentLinks = [
+    { title: "Chrono24", url: "https://www.chrono24.com" },
+    { title: "Jewelers Exchange", url: "https://jewelryexchange.com/product-category/watches/" },
+    {title: "Ebay", url: "https://www.ebay.com/b/Luxury-Watches/31387/bn_36841947" },
+    { title: "Sammy's IG Page", url: "https://www.instagram.com/watchadandco/?hl=en" }
+];
 
 function renderLinks() {
     const list = document.getElementById("linksList");
     list.innerHTML = "";
 
-    // Permanent links first
+    // Render permanent links first (cannot delete)
     permanentLinks.forEach(link => {
         const li = document.createElement("li");
         li.className = "link-item permanent";
@@ -293,7 +298,7 @@ function renderLinks() {
         list.appendChild(li);
     });
 
-    // User-added links
+    // Render user-added links with delete button
     links.forEach((link, index) => {
         const li = document.createElement("li");
         li.className = "link-item";
@@ -317,6 +322,7 @@ function renderLinks() {
         list.appendChild(li);
     });
 }
+
 function saveLink() {
     const titleInput = document.getElementById("linkTitle");
     const urlInput = document.getElementById("linkURL");
@@ -330,6 +336,11 @@ function saveLink() {
     urlInput.value = "";
     renderLinks();
 }
+
+// Initial load
+document.addEventListener("DOMContentLoaded", () => {
+    renderLinks();
+});
 
 /* =========================
    INITIAL LOAD
