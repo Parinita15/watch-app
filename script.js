@@ -96,7 +96,6 @@ function showWatch() {
     document.getElementById("buyLink").href = w.link;
 }
 
-function likeWatch() { currentWatch++; showWatch(); }
 function skipWatch() { currentWatch++; showWatch(); }
 function saveCurrentWatch() {
     const w = watches[currentWatch];
@@ -113,10 +112,26 @@ function saveCurrentWatch() {
 function renderSavedWatches() {
     const div = document.getElementById("savedWatches");
     div.innerHTML = "";
-    savedWatches.forEach(w => {
-        const el = document.createElement("div");
-        el.textContent = `${w.brand} ${w.model}`;
-        div.appendChild(el);
+
+    // Show newest first
+    [...savedWatches].reverse().forEach((w, index) => {
+        const card = document.createElement("div");
+        card.className = "saved-watch-card";
+        card.innerHTML = `
+            <span>${w.brand} ${w.model}</span>
+            <button class="delete-btn">🗑️</button>
+        `;
+
+        // Delete button click
+        card.querySelector(".delete-btn").onclick = () => {
+            // Find actual index in savedWatches array
+            const actualIndex = savedWatches.length - 1 - index;
+            savedWatches.splice(actualIndex, 1);
+            localStorage.setItem("savedWatches", JSON.stringify(savedWatches));
+            renderSavedWatches();
+        };
+
+        div.appendChild(card);
     });
 }
 
@@ -125,6 +140,7 @@ function renderSavedWatches() {
 ========================= */
 let notes = JSON.parse(localStorage.getItem("watchAppNotes")) || [];
 
+// Save note
 function saveNote() {
     const input = document.getElementById("noteInput");
     const text = input.value.trim();
@@ -136,6 +152,7 @@ function saveNote() {
     renderNotes();
 }
 
+// Render notes with swipe-to-delete
 function renderNotes() {
     const container = document.getElementById("notesContainer");
     container.innerHTML = "";
@@ -145,11 +162,11 @@ function renderNotes() {
         card.className = "note-card";
         card.textContent = note;
 
-        // Swipe-to-delete
+        // Swipe-to-delete using Hammer.js
         const hammer = new Hammer(card);
         hammer.on("swipeleft swiperight", () => {
             card.style.transform = "translateX(-100%)";
-            card.style.opacity = 0;
+            card.style.opacity = "0";
 
             setTimeout(() => {
                 notes.splice(index, 1);
@@ -169,28 +186,27 @@ function renderNotes() {
     });
 }
 
+// Initial load
+document.addEventListener("DOMContentLoaded", () => {
+    renderNotes();
+});
+
+
 /* =========================
    LINKS LOGIC
 ========================= */
-let links = JSON.parse(localStorage.getItem("watchAppLinks")) || [];
+let links = JSON.parse(localStorage.getItem("watchAppLinks")) || [
+    { title: "Chrono24", url: "https://www.chrono24.com" },
+    { title: "Jewelers Exchage", url: "https://jewelryexchange.com/product-category/watches/" },
+    { title: "WatchBox", url: "https://www.thewatchbox.com" },
+    { title: "Sammy's IG page", url: "https://www.instagram.com/watchadandco/?hl=en" }
+];
 
-function saveLink() {
-    const titleInput = document.getElementById("linkTitle");
-    const urlInput = document.getElementById("linkURL");
-    const title = titleInput.value.trim();
-    const url = urlInput.value.trim();
-    if (!title || !url) return;
-
-    links.push({ title, url });
-    localStorage.setItem("watchAppLinks", JSON.stringify(links));
-    titleInput.value = "";
-    urlInput.value = "";
-    renderLinks();
-}
-
+// Render Links
 function renderLinks() {
     const list = document.getElementById("linksList");
     list.innerHTML = "";
+
     links.forEach((link, index) => {
         const li = document.createElement("li");
         const a = document.createElement("a");
@@ -199,15 +215,31 @@ function renderLinks() {
         a.textContent = link.title;
         li.appendChild(a);
 
-        li.onclick = () => {
-            links.splice(index, 1);
-            localStorage.setItem("watchAppLinks", JSON.stringify(links));
-            renderLinks();
-        };
+        // Only allow deletion if not permanent
+        if (link.title !== "Chrono24" && link.title !== "WatchBox") {
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "🗑️";
+            delBtn.style.marginLeft = "8px";
+            delBtn.onclick = () => {
+                links.splice(index, 1);
+                localStorage.setItem("watchAppLinks", JSON.stringify(links));
+                renderLinks();
+            };
+            li.appendChild(delBtn);
+        }
 
         list.appendChild(li);
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Load saved links from localStorage OR initialize permanent links
+    links = JSON.parse(localStorage.getItem("watchAppLinks")) || [
+        { title: "Chrono24", url: "https://www.chrono24.com" },
+        { title: "WatchBox", url: "https://www.thewatchbox.com" }
+    ];
+    renderLinks();
+});
 
 /* =========================
    VIEW SWITCHING
@@ -227,3 +259,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderNotes();
     renderLinks();
 });
+function saveLink() {
+    const titleInput = document.getElementById("linkTitle");
+    const urlInput = document.getElementById("linkURL");
+
+    const title = titleInput.value.trim();
+    const url = urlInput.value.trim();
+
+    if (!title || !url) return; // ignore empty
+
+    // Add new link
+    links.push({ title, url });
+
+    // Save to localStorage
+    localStorage.setItem("watchAppLinks", JSON.stringify(links));
+
+    // Clear inputs
+    titleInput.value = "";
+    urlInput.value = "";
+
+    // Re-render list
+    renderLinks();
+}

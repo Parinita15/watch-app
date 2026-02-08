@@ -31,7 +31,6 @@
     <!-- Buttons -->
     <div class="buttons">
         <button onclick="skipWatch()">Skip</button>
-        <button onclick="likeWatch()">Like</button>
         <button onclick="saveCurrentWatch()">Save ❤️</button>
     </div>
 
@@ -53,16 +52,17 @@
 </div>
 
 <!-- Notes Page -->
-<<div id="notesView" class="view">
+<div id="notesView" class="view">
     <h2>Collector Notes</h2>
-
-    <!-- Input area -->
     <textarea id="noteInput" placeholder="Write a note..."></textarea>
     <button type="button" onclick="saveNote()">Save Note</button>
-
-    <!-- Saved notes appear here -->
     <div id="notesContainer"></div>
 </div>
+
+<!-- Make sure Hammer.js is included BEFORE your script.js -->
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+<script src="script.js"></script>
+
 
 <!-- Links Page -->
 <div id="linksView" class="view">
