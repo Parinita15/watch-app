@@ -1,3 +1,12 @@
+/* =========================
+   VIEW SWITCHING
+========================= */
+function showView(viewId) {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    const target = document.getElementById(viewId);
+    if (target) target.classList.add("active");
+}
+
 // =====================
 // Personalized Watches
 // =====================
@@ -74,256 +83,74 @@ const watches = [
     }
 ];
 
-let favoriteBrands = {};
 
-// =====================
-// State Variables
-// =====================
-let current = 0;
-let likedWatches = [];
-let savedWatches = [];
-let recommendations = [];
+let currentWatch = 0;
+let savedWatches = JSON.parse(localStorage.getItem("savedWatches")) || [];
 
-// =====================
-// Load Current Watch
-// =====================
-function loadWatch() {
-    if (current >= watches.length) {
-        showResults();
-        return;
-    }
-
-    const watch = watches[current];
-    document.getElementById("watchImage").src = watch.image;
-    document.getElementById("brand").textContent = watch.brand;
-    document.getElementById("model").textContent = watch.model;
-    document.getElementById("buyLink").href = watch.link;
-    document.getElementById("note").textContent = watch.notes;
+function showWatch() {
+    if (currentWatch >= watches.length) currentWatch = 0; // loop
+    const w = watches[currentWatch];
+    document.getElementById("watchImage").src = w.image;
+    document.getElementById("brand").textContent = w.brand;
+    document.getElementById("model").textContent = w.model;
+    document.getElementById("buyLink").href = w.link;
 }
 
-// =====================
-// Button Handlers
-// =====================
-function skipWatch() {
-    animateCard('left', false);
-}
-
-function likeWatch() {
-    animateCard('right', true);
-}
-
+function likeWatch() { currentWatch++; showWatch(); }
+function skipWatch() { currentWatch++; showWatch(); }
 function saveCurrentWatch() {
-    if (current >= watches.length) return;
-
-    const watch = watches[current];
-
-    // Prevent duplicates
-    if (savedWatches.some(w => w.model === watch.model)) return;
-
-    savedWatches.push(watch);
-    renderSavedWatches();
-    savePreferences();
-}
-
-
-function addRecommendation() {
-    const input = document.getElementById('recommendationInput');
-    const value = input.value.trim();
-    if(value === "") return;
-
-    recommendations.push(value);
-    const listDiv = document.getElementById('recommendationList');
-    const p = document.createElement('p');
-    p.textContent = value;
-    listDiv.appendChild(p);
-    input.value = "";
-    savePreferences();
-
-}
-
-// =====================
-// Animate Card Swipe
-// =====================
-function animateCard(direction, isLike) {
-    const card = document.querySelector('.card');
-    if (!card) return;
-
-    // Clone for animation
-    const clone = card.cloneNode(true);
-    const rect = card.getBoundingClientRect();
-    clone.style.position = 'absolute';
-    clone.style.top = rect.top + 'px';
-    clone.style.left = rect.left + 'px';
-    clone.style.width = rect.width + 'px';
-    clone.style.zIndex = 1000;
-    document.body.appendChild(clone);
-
-    clone.classList.add(direction === 'right' ? 'swipe-right' : 'swipe-left');
-
-    if (isLike) {
-        confetti({
-            particleCount: 50,
-            spread: 60,
-            origin: { y: 0.6 },
-            colors: ['#cfd2d6', '#ffffff', '#e0e3e6']
-        });
-    }
-
-    setTimeout(() => {
-        if (isLike) {
-    const watch = watches[current];
-    likedWatches.push(watch);
-
-    // Track brand preference
-    if (!favoriteBrands[watch.brand]) {
-        favoriteBrands[watch.brand] = 1;
-    } else {
-        favoriteBrands[watch.brand]++;
+    const w = watches[currentWatch];
+    if (!savedWatches.find(w2 => w2.brand === w.brand && w2.model === w.model)) {
+        savedWatches.push(w);
+        localStorage.setItem("savedWatches", JSON.stringify(savedWatches));
+        renderSavedWatches();
     }
 }
 
-        current++;
-        clone.remove();
-        loadWatch();
-        attachSwipe();
-    }, 500);
-    savePreferences();
-
-}
-
-// =====================
-// Swipe Gesture Handler
-// =====================
-function attachSwipe() {
-    const card = document.querySelector('.card');
-    if (!card) return;
-
-    const hammer = new Hammer(card);
-    hammer.off('swiperight swipeleft');
-    hammer.on('swiperight', () => animateCard('right', true));
-    hammer.on('swipeleft', () => animateCard('left', false));
-}
-
-// =====================
-// Show Final Collection
-// =====================
-function showResults() {
-    document.body.innerHTML = `<h1>Richard's Curated Luxury Collection</h1>
-                               <p>Every pick is for you, handpicked with love 💖</p>`;
-    likedWatches.forEach(watch => {
-        document.body.innerHTML += `
-            <div class="card">
-                <img src="${watch.image}">
-                <h2>${watch.brand}</h2>
-                <p>${watch.model}</p>
-                <p class="note">${watch.notes}</p>
-                <a href="${watch.link}" target="_blank">View Watch</a>
-            </div>
-        `;
+/* =========================
+   RENDER SAVED WATCHES
+========================= */
+function renderSavedWatches() {
+    const div = document.getElementById("savedWatches");
+    div.innerHTML = "";
+    savedWatches.forEach(w => {
+        const el = document.createElement("div");
+        el.textContent = `${w.brand} ${w.model}`;
+        div.appendChild(el);
     });
 }
 
-// =====================
-// Initialize App
-// =====================
-window.addEventListener('DOMContentLoaded', () => {
-    loadPreferences();
-    loadWatch();
-    attachSwipe();
-});
-
-function savePreferences() {
-    localStorage.setItem("savedWatches", JSON.stringify(savedWatches));
-    localStorage.setItem("likedWatches", JSON.stringify(likedWatches));
-    localStorage.setItem("favoriteBrands", JSON.stringify(favoriteBrands));
-}
-function loadPreferences() {
-    const saved = localStorage.getItem("savedWatches");
-    const liked = localStorage.getItem("likedWatches");
-    const brands = localStorage.getItem("favoriteBrands");
-
-    if (saved) savedWatches = JSON.parse(saved);
-    if (liked) likedWatches = JSON.parse(liked);
-    if (brands) favoriteBrands = JSON.parse(brands);
-
-    renderSavedWatches();
-
-}
-function getTopBrand() {
-    let topBrand = "";
-    let max = 0;
-
-    for (let brand in favoriteBrands) {
-        if (favoriteBrands[brand] > max) {
-            max = favoriteBrands[brand];
-            topBrand = brand;
-        }
-    }
-    return topBrand;
-}
-document.getElementById("topBrand").textContent =
-    "Your favorite brand: " + getTopBrand();
-
-    function renderSavedWatches() {
-    const savedDiv = document.getElementById("savedWatches");
-    savedDiv.innerHTML = ""; // Clear current thumbnails
-
-    savedWatches.forEach((watch, index) => {
-        const img = document.createElement("img");
-        img.src = watch.image;
-        img.title = "Click to remove: " + watch.brand + " " + watch.model;
-
-        // 👇 THIS enables unsaving
-        img.addEventListener("click", () => {
-            savedWatches.splice(index, 1);
-            renderSavedWatches();
-            savePreferences();
-        });
-
-        savedDiv.appendChild(img);
-    });
-}
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js");
-    });
-}
-function showView(viewId) {
-    document.querySelectorAll('.view').forEach(v => {
-        v.classList.remove('active');
-    });
-    document.getElementById(viewId).classList.add('active');
-}
-let notes = JSON.parse(localStorage.getItem("notes")) || [];
+/* =========================
+   NOTES LOGIC + SWIPE-TO-DELETE
+========================= */
+let notes = JSON.parse(localStorage.getItem("watchAppNotes")) || [];
 
 function saveNote() {
-    const text = document.getElementById("noteInput").value;
+    const input = document.getElementById("noteInput");
+    const text = input.value.trim();
     if (!text) return;
 
     notes.push(text);
-    localStorage.setItem("notes", JSON.stringify(notes));
-    document.getElementById("noteInput").value = "";
+    localStorage.setItem("watchAppNotes", JSON.stringify(notes));
+    input.value = "";
     renderNotes();
 }
 
 function renderNotes() {
-    const list = document.getElementById("notesList");
-    if (!list) return;
-
-    list.innerHTML = "";
+    const container = document.getElementById("notesContainer");
+    container.innerHTML = "";
 
     notes.forEach((note, index) => {
-        const li = document.createElement("li");
-        li.textContent = note;
+        const card = document.createElement("div");
+        card.className = "note-card";
+        card.textContent = note;
 
-        // Make swipeable with Hammer.js
-        const hammer = new Hammer(li);
-        hammer.on("swipeleft swiperight", function () {
-            // Animate out
-            li.style.transform = "translateX(-100%)";
-            li.style.opacity = "0";
+        // Swipe-to-delete
+        const hammer = new Hammer(card);
+        hammer.on("swipeleft swiperight", () => {
+            card.style.transform = "translateX(-100%)";
+            card.style.opacity = 0;
 
-            // After animation, delete the note
             setTimeout(() => {
                 notes.splice(index, 1);
                 localStorage.setItem("watchAppNotes", JSON.stringify(notes));
@@ -331,45 +158,50 @@ function renderNotes() {
             }, 300);
         });
 
-        // Optional: click to delete as fallback
-        li.onclick = () => {
+        // Click-to-delete fallback
+        card.onclick = () => {
             notes.splice(index, 1);
             localStorage.setItem("watchAppNotes", JSON.stringify(notes));
             renderNotes();
         };
 
-        list.appendChild(li);
+        container.appendChild(card);
     });
 }
 
-
-renderNotes();
-let links = JSON.parse(localStorage.getItem("links")) || [];
+/* =========================
+   LINKS LOGIC
+========================= */
+let links = JSON.parse(localStorage.getItem("watchAppLinks")) || [];
 
 function saveLink() {
-    const title = document.getElementById("linkTitle").value;
-    const url = document.getElementById("linkURL").value;
+    const titleInput = document.getElementById("linkTitle");
+    const urlInput = document.getElementById("linkURL");
+    const title = titleInput.value.trim();
+    const url = urlInput.value.trim();
     if (!title || !url) return;
 
     links.push({ title, url });
-    localStorage.setItem("links", JSON.stringify(links));
+    localStorage.setItem("watchAppLinks", JSON.stringify(links));
+    titleInput.value = "";
+    urlInput.value = "";
     renderLinks();
-
-    document.getElementById("linkTitle").value = "";
-    document.getElementById("linkURL").value = "";
 }
 
 function renderLinks() {
     const list = document.getElementById("linksList");
     list.innerHTML = "";
-
     links.forEach((link, index) => {
         const li = document.createElement("li");
-        li.innerHTML = `<a href="${link.url}" target="_blank">${link.title}</a>`;
+        const a = document.createElement("a");
+        a.href = link.url;
+        a.target = "_blank";
+        a.textContent = link.title;
+        li.appendChild(a);
 
         li.onclick = () => {
             links.splice(index, 1);
-            localStorage.setItem("links", JSON.stringify(links));
+            localStorage.setItem("watchAppLinks", JSON.stringify(links));
             renderLinks();
         };
 
@@ -377,4 +209,21 @@ function renderLinks() {
     });
 }
 
-renderLinks();
+/* =========================
+   VIEW SWITCHING
+========================= */
+function showView(viewId) {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    const target = document.getElementById(viewId);
+    if (target) target.classList.add("active");
+}
+
+/* =========================
+   INITIAL LOAD
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+    showWatch();
+    renderSavedWatches();
+    renderNotes();
+    renderLinks();
+});

@@ -324,3 +324,18 @@ button:hover {
     position: relative;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
+#notesContainer {
+    margin-top: 16px;
+}
+
+.note-card {
+    background: #222;       /* dark card for luxury look */
+    color: silver;
+    padding: 12px 16px;
+    margin: 8px 0;
+    border-radius: 12px;
+    cursor: grab;
+    user-select: none;
+    position: relative;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}

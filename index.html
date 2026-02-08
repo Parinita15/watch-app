@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Richard's Luxury Watch Collection</title>
     <link rel="stylesheet" href="style.css">
@@ -9,24 +9,23 @@
 </head>
 <body>
 
-
-<!-- Bottom Nav -->
+<!-- Bottom Navigation -->
 <div class="bottom-nav">
     <button onclick="showView('homeView')">🏠</button>
     <button onclick="showView('notesView')">📝</button>
     <button onclick="showView('linksView')">🔗</button>
 </div>
 
-<!-- Home / Swipe Watches -->
+<!-- Home Page -->
 <div id="homeView" class="view active">
-<h1>Welcome, Richard! Your Personal Watch Collection</h1>
+    <h1>Welcome, Richard! Your Personal Watch Collection</h1>
+
     <!-- Watch Card -->
     <div class="card">
-        <img id="watchImage">
+        <img id="watchImage" src="">
         <h2 id="brand"></h2>
         <p id="model"></p>
         <a id="buyLink" target="_blank">View Details</a>
-        <p id="note" class="note"></p>
     </div>
 
     <!-- Buttons -->
@@ -42,33 +41,30 @@
         <div id="savedWatches"></div>
     </div>
 
-    <!-- Recommendations via Google Form -->
+    <!-- Recommendations -->
     <div id="recommendationBox">
         <h2>Recommendations</h2>
         <iframe 
             src="https://docs.google.com/forms/d/e/1FAIpQLSdLn41xbNtAGkgM8aTFyMH6qoAL0qvAHv6gw8X9TyEy2etH0Q/viewform?usp=publish-editor" 
             width="100%" 
             height="250" 
-            frameborder="0" 
-            marginheight="0" 
-            marginwidth="0">
-            Loading…
-        </iframe>
+            frameborder="0"></iframe>
     </div>
-
 </div>
 
-<!-- Notes View -->
-<div id="notesView" class="view">
+<!-- Notes Page -->
+<<div id="notesView" class="view">
     <h2>Collector Notes</h2>
 
+    <!-- Input area -->
     <textarea id="noteInput" placeholder="Write a note..."></textarea>
     <button type="button" onclick="saveNote()">Save Note</button>
 
-    <ul id="notesList"></ul>
+    <!-- Saved notes appear here -->
+    <div id="notesContainer"></div>
 </div>
 
-<!-- Links View -->
+<!-- Links Page -->
 <div id="linksView" class="view">
     <h2>Quick Links</h2>
 
@@ -83,8 +79,7 @@
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
-<!-- Your script -->
+<!-- Script -->
 <script src="script.js"></script>
-
 </body>
 </html>
