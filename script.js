@@ -10,7 +10,8 @@ function showView(viewId) {
 // 🔒 Permanent Quick Links
 const permanentLinks = [
     { title: "Chrono24", url: "https://www.chrono24.com" },
-    { title: "Hodinkee", url: "https://www.hodinkee.com" }
+    { title: "Jewelers Exchage", url: "https://jewelryexchange.com/product-category/watches/" },
+    { title: "Sammy's IG Page", url: "https://www.instagram.com/watchadandco/?hl=en" }
 ];
 
 // =====================
@@ -81,11 +82,67 @@ const watches = [
         notes: "The green would compliment your eyes, Richard."
     },
     {
-        brand: "Zenith",
-        model: "Defy 21",
-        image: "images/zenith-defy-21.jpg",
-        link: "https://www.zenithwatches.com/en-us/watches/defy-21",
-        notes: "Skeletonistic and futuristic, just like your style, Richard."
+        brand: "TAG Heuer",
+        model: "Aquaracer",
+        image: "images/tag-heuer-aquaracer.jpg",
+        link: "https://www.tagheuer.com/us-en/watches/aquaracer",
+        notes: "The Aquaracer is a classic, Richard."
+    },
+    {
+        brand: "Omega",
+        model: "Apollo 11",
+        image: "images/omega-apollo-11.jpg",
+        link: "https://www.omegawatches.com/chronicle/1969-the-first-journey-to-the-moon",
+        notes: "Another date to the moon? This one is for you, Richard!"
+    },
+    {
+        brand: "Ferdinand Berthoud",
+        model: "Chronomètre FB 2RE",
+        image: "images/ferdinand-berthoud-chronometre-fb-2re.jpg",
+        link: "https://www.hodinkee.com/articles/ferdinand-berthoud-chronometre-fb-2re-introducing",
+        notes: "The leather and hands would go well with your style, Richard."
+    },
+    {
+        brand: "Vianney Halter",
+        model: "La Résonance",
+        image: "images/vianney-halter-la-resonance.jpg",
+        link: "https://www.vianney-halter.com/watches/la-resonance/",
+        notes: "Engineering marvel with a unique design, just like you, Richard."
+    },
+    {
+        brand: "MB&F",
+        model: "LM Perpetual EVO",
+        image: "images/mbf-lm-perpetual-evo.jpg",
+        link: "https://watchesbysjx.com/2020/10/mbf-lm-perpetual-evo.html",
+        notes: "The most complex watch in the world, Richard."
+    },
+    {
+        brand: "F.P. Journe",
+        model: "Chronomètre Bleu",
+        image: "images/fp-journe-chronometre-bleu.jpg",
+        link: "https://wristaficionado.com/products/f-p-journe-cb-classique-collection-chronometre-bleu?variant=45807855567092&country=US&currency=USD&utm_medium=product_sync&utm_source=google&utm_source=google&utm_medium=cpc&utm_campaign=branded-pmax&gad_source=1&gad_campaignid=22563895192&gbraid=0AAAAACdZ8Kx7qGfCOHzHGenGNXdwTF9wv",
+        notes: "This shade of blue is so elegant!"
+    },
+    {
+        brand: "Tudor",
+        model: "Oyster Prince Ranger",
+        image: "images/tudor-oyster-prince-ranger.jpg",
+        link: "https://www.tudorwatch.com/en/inside-tudor/history/tudor-history-origins-1960-to-1969",
+        notes: "I love pearls! This one is adorable."
+    },
+    {
+        brand: "Breitling",
+        model: "Navitimer B01 Chronograph 46",
+        image: "images/breitling-navitimer-b01.jpg",
+        link: "https://www.breitling.com/en-us/watches/navitimer-b01-chronograph-46/",
+        notes: "I love this type of watch."
+    },
+    {
+        brand: "Breitling",
+        model: "Navitimer B01 Chronograph 46",
+        image: "images/breitling-navitimer-b01.jpg",
+        link: "https://www.breitling.com/en-us/watches/navitimer-b01-chronograph-46/",
+        notes: "I love this type of watch."
     }
 ];
 
