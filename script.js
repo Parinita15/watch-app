@@ -308,21 +308,40 @@ function saveNote() {
 
 function renderNotes() {
     const list = document.getElementById("notesList");
+    if (!list) return;
+
     list.innerHTML = "";
 
     notes.forEach((note, index) => {
         const li = document.createElement("li");
         li.textContent = note;
 
+        // Make swipeable with Hammer.js
+        const hammer = new Hammer(li);
+        hammer.on("swipeleft swiperight", function () {
+            // Animate out
+            li.style.transform = "translateX(-100%)";
+            li.style.opacity = "0";
+
+            // After animation, delete the note
+            setTimeout(() => {
+                notes.splice(index, 1);
+                localStorage.setItem("watchAppNotes", JSON.stringify(notes));
+                renderNotes();
+            }, 300);
+        });
+
+        // Optional: click to delete as fallback
         li.onclick = () => {
             notes.splice(index, 1);
-            localStorage.setItem("notes", JSON.stringify(notes));
+            localStorage.setItem("watchAppNotes", JSON.stringify(notes));
             renderNotes();
         };
 
         list.appendChild(li);
     });
 }
+
 
 renderNotes();
 let links = JSON.parse(localStorage.getItem("links")) || [];
