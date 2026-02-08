@@ -1,18 +1,8 @@
 /* =========================
    VIEW SWITCHING
 ========================= */
-function showView(viewId) {
-    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
-    const target = document.getElementById(viewId);
-    if (target) target.classList.add("active");
-}
 
-// 🔒 Permanent Quick Links
-
-// =====================
-// Personalized Watches
-// =====================
-const watches = [
+let watches = [
     {
         brand: "Patek Phillipe",
         model: "Nautilus 3710",
@@ -135,33 +125,38 @@ const watches = [
 ];
 
 
+// Load saved notes for watches from localStorage if any
+const savedWatchesWithNotes = JSON.parse(localStorage.getItem("watchesWithNotes"));
+if (savedWatchesWithNotes) watches = savedWatchesWithNotes;
+
 let currentWatch = 0;
 let savedWatches = JSON.parse(localStorage.getItem("savedWatches")) || [];
 
 /* =========================
-   SHOW WATCH CARD + NOTE
+   SHOW CURRENT WATCH
 ========================= */
 function showWatch() {
-    if (currentWatch >= watches.length) currentWatch = 0;
-    const w = watches[currentWatch];
+    if (currentWatch >= watches.length) currentWatch = 0; // loop
 
+    const w = watches[currentWatch];
     document.getElementById("watchImage").src = w.image;
     document.getElementById("brand").textContent = w.brand;
     document.getElementById("model").textContent = w.model;
     document.getElementById("buyLink").href = w.link;
 
-    // Show note on card
+    // Show note if exists
     const noteEl = document.getElementById("note");
-    if (w.notes && w.notes.trim() !== "") {
-        noteEl.textContent = "💬 " + w.notes;
+    if (w.note) {
+        noteEl.textContent = "💬 " + w.note;
         noteEl.style.display = "block";
     } else {
         noteEl.textContent = "";
         noteEl.style.display = "none";
     }
 }
+
 /* =========================
-   SKIP / SAVE WATCH
+   WATCH BUTTONS
 ========================= */
 function skipWatch() { 
     currentWatch++; 
@@ -171,6 +166,7 @@ function skipWatch() {
 function saveCurrentWatch() {
     const w = watches[currentWatch];
 
+    // Save watch if not already saved
     if (!savedWatches.find(w2 => w2.brand === w.brand && w2.model === w.model)) {
         savedWatches.push(w);
         localStorage.setItem("savedWatches", JSON.stringify(savedWatches));
@@ -181,18 +177,16 @@ function saveCurrentWatch() {
     currentWatch++;
     showWatch();
 }
-/* =========================
-   SAVE NOTE FOR CURRENT WATCH
-========================= */
+
 function saveWatchNote() {
     const input = document.getElementById("watchNoteInput");
     const text = input.value.trim();
     if (!text) return;
 
-    watches[currentWatch].notes = text; 
+    watches[currentWatch].note = text;
+    input.value = "";
     localStorage.setItem("watchesWithNotes", JSON.stringify(watches));
     showWatch();
-    input.value = "";
 }
 
 /* =========================
@@ -215,12 +209,14 @@ function renderSavedWatches() {
             savedWatches.splice(actualIndex, 1);
             localStorage.setItem("savedWatches", JSON.stringify(savedWatches));
             renderSavedWatches();
-        }; div.appendChild(card);
+        };
+
+        div.appendChild(card);
     });
 }
 
 /* =========================
-   GENERAL NOTES + SWIPE DELETE
+   NOTES LOGIC + SWIPE-TO-DELETE
 ========================= */
 let notes = JSON.parse(localStorage.getItem("watchAppNotes")) || [];
 
@@ -234,7 +230,6 @@ function saveNote() {
     input.value = "";
     renderNotes();
 }
-
 
 function renderNotes() {
     const container = document.getElementById("notesContainer");
@@ -269,16 +264,13 @@ function renderNotes() {
 /* =========================
    QUICK LINKS
 ========================= */
-/* =========================
-   QUICK LINKS
-========================= */
 let links = JSON.parse(localStorage.getItem("watchAppLinks")) || [];
 
-// Permanent links (always shown at top)
+// Permanent links (always visible)
 const permanentLinks = [
     { title: "Chrono24", url: "https://www.chrono24.com" },
     { title: "Jewelers Exchange", url: "https://jewelryexchange.com/product-category/watches/" },
-    {title: "Ebay", url: "https://www.ebay.com/b/Luxury-Watches/31387/bn_36841947" },
+    { title: "Ebay", url: "https://www.ebay.com/b/Luxury-Watches/31387/bn_36841947" },
     { title: "Sammy's IG Page", url: "https://www.instagram.com/watchadandco/?hl=en" }
 ];
 
@@ -286,7 +278,7 @@ function renderLinks() {
     const list = document.getElementById("linksList");
     list.innerHTML = "";
 
-    // Render permanent links first (cannot delete)
+    // Render permanent links first
     permanentLinks.forEach(link => {
         const li = document.createElement("li");
         li.className = "link-item permanent";
@@ -298,7 +290,7 @@ function renderLinks() {
         list.appendChild(li);
     });
 
-    // Render user-added links with delete button
+    // Render user-added links with delete
     links.forEach((link, index) => {
         const li = document.createElement("li");
         li.className = "link-item";
@@ -337,25 +329,19 @@ function saveLink() {
     renderLinks();
 }
 
-// Initial load
-document.addEventListener("DOMContentLoaded", () => {
-    renderLinks();
-});
+/* =========================
+   VIEW SWITCHING
+========================= */
+function showView(viewId) {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    const target = document.getElementById(viewId);
+    if (target) target.classList.add("active");
+}
 
 /* =========================
    INITIAL LOAD
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-    // Load watches with notes
-    const savedW = JSON.parse(localStorage.getItem("watchesWithNotes"));
-    if (savedW) watches = savedW;
-// Load saved watches
-    savedWatches = JSON.parse(localStorage.getItem("savedWatches")) || [];
-
-    // Load links
-    links = JSON.parse(localStorage.getItem("watchAppLinks")) || [];
-
-    // Render everything
     showWatch();
     renderSavedWatches();
     renderNotes();
