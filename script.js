@@ -7,6 +7,12 @@ function showView(viewId) {
     if (target) target.classList.add("active");
 }
 
+// 🔒 Permanent Quick Links
+const permanentLinks = [
+    { title: "Chrono24", url: "https://www.chrono24.com" },
+    { title: "Hodinkee", url: "https://www.hodinkee.com" }
+];
+
 // =====================
 // Personalized Watches
 // =====================
@@ -214,9 +220,10 @@ function renderLinks() {
     const list = document.getElementById("linksList");
     list.innerHTML = "";
 
-    links.forEach((link, index) => {
-
+    // 🔒 Permanent links (no delete button)
+    permanentLinks.forEach(link => {
         const li = document.createElement("li");
+        li.className = "link-item permanent";
 
         const a = document.createElement("a");
         a.href = link.url;
@@ -224,31 +231,34 @@ function renderLinks() {
         a.textContent = link.title;
 
         li.appendChild(a);
+        list.appendChild(li);
+    });
 
-        // Delete button (only for user links)
-        if (!permanentLinks.find(p => p.title === link.title && p.url === link.url)) {
+    // ✍️ User-saved links (with delete)
+    links.forEach((link, index) => {
+        const li = document.createElement("li");
+        li.className = "link-item";
 
-            const delBtn = document.createElement("button");
-            delBtn.textContent = "🗑️";
-            delBtn.className = "delete-link-btn";
+        const a = document.createElement("a");
+        a.href = link.url;
+        a.target = "_blank";
+        a.textContent = link.title;
 
-            delBtn.onclick = () => {
-                links.splice(index, 1);
+        const del = document.createElement("span");
+        del.textContent = "🗑️";
+        del.className = "delete-link";
+        del.onclick = () => {
+            links.splice(index, 1);
+            localStorage.setItem("watchAppLinks", JSON.stringify(links));
+            renderLinks();
+        };
 
-                const userLinks = links.filter(l =>
-                    !permanentLinks.find(p => p.title === l.title && p.url === l.url)
-                );
-
-                localStorage.setItem("watchAppLinks", JSON.stringify(userLinks));
-                renderLinks();
-            };
-
-            li.appendChild(delBtn);
-        }
-
+        li.appendChild(a);
+        li.appendChild(del);
         list.appendChild(li);
     });
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
