@@ -157,7 +157,18 @@ function showWatch() {
     document.getElementById("brand").textContent = w.brand;
     document.getElementById("model").textContent = w.model;
     document.getElementById("buyLink").href = w.link;
+    
+    // Show the note for this watch (if it exists)
+    const noteEl = document.getElementById("note");
+    if (w.note) {
+        noteEl.textContent = "💬 " + w.note;
+        noteEl.style.display = "block";
+    } else {
+        noteEl.textContent = "";
+        noteEl.style.display = "none";
+    }
 }
+
 
 function skipWatch() { currentWatch++; showWatch(); }
 function saveCurrentWatch() {
@@ -175,6 +186,23 @@ function saveCurrentWatch() {
     showWatch();
 }
 
+function saveWatchNote() {
+    const input = document.getElementById("watchNoteInput"); // a new input for notes
+    const text = input.value.trim();
+    if (!text) return;
+
+    watches[currentWatch].note = text; // save note to this watch
+    showWatch(); // update card
+    input.value = "";
+    
+    // Optional: save all watches to localStorage so notes persist
+    localStorage.setItem("watchesWithNotes", JSON.stringify(watches));
+}
+document.addEventListener("DOMContentLoaded", () => {
+    const saved = JSON.parse(localStorage.getItem("watchesWithNotes"));
+    if (saved) watches = saved;
+    showWatch();
+});
 
 /* =========================
    RENDER SAVED WATCHES
