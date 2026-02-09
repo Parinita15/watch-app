@@ -121,6 +121,20 @@ let watches = [
         image: "images/breitling-navitimer-b01.jpg",
         link: "https://www.breitling.com/en-us/watches/navitimer-b01-chronograph-46/",
         notes: "I love this type of watch."
+    },
+    {
+        brand: "Patek Phillipe",
+        model: "Rose Gold Grand Complication",
+        image: "images/patek-phillipe-grand-complication.jpg",
+        link: "https://www.jomashop.com/patek-philippe-grand-complications-sky-moon-tourbillon-hand-wind-brown-dial-mens-watch-6002r-001.html?utm_source=google&utm_medium=cpc&utm_campaign=%28ROI%29%20Shopping%20-%20Contact%20Us%20Watches&utm_id=22034441439&utm_content=171016143766&utm_term=&gad_source=1&gad_campaignid=22034441439&gbraid=0AAAAAD_rBknq1U-0jqJCWrHrAr5XyVS28&gclid=Cj0KCQiAhaHMBhD2ARIsAPAU_D6ql8qsP38mb2YunFlmp7BptGWbZ_t5MzyLrJXPGy_DWrRI2CjJDD8aAg57EALw_wcB",
+        notes: "I love this type of watch."
+    },
+    {
+        brand: "Omega",
+        model: "Constellation",
+        image: "images/omega-constellation.jpg",
+        link: "https://www.omegawatches.com/en-us/watches/constellation/",
+        notes: "I love this type of watch."
     }
 ];
 
