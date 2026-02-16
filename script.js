@@ -361,3 +361,137 @@ document.addEventListener("DOMContentLoaded", () => {
     renderNotes();
     renderLinks();
 });
+
+/* =========================
+   JOURNAL SYSTEM
+========================= */
+
+let journals = JSON.parse(localStorage.getItem("watchAppJournals")) || [];
+
+function saveJournal(){
+
+    const input = document.getElementById("journalInput");
+
+    if(!input.value.trim()) return;
+
+    journals.push({
+        text: input.value,
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("watchAppJournals", JSON.stringify(journals));
+
+    input.value="";
+
+    renderJournals();
+}
+
+function renderJournals(){
+
+    const container = document.getElementById("journalContainer");
+
+    container.innerHTML="";
+
+    journals.reverse().forEach((entry,index)=>{
+
+        const div=document.createElement("div");
+
+        div.className="note-card";
+
+        div.innerHTML=
+
+        `<strong>${entry.date}</strong><br>${entry.text}`;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================
+   PICTURES SYSTEM
+========================= */
+
+let pictures = JSON.parse(localStorage.getItem("watchAppPictures")) || [];
+
+function savePicture(){
+
+    const file=document.getElementById("imageUpload").files[0];
+
+    if(!file) return;
+
+    const reader=new FileReader();
+
+    reader.onload=function(e){
+
+        pictures.push(e.target.result);
+
+        localStorage.setItem("watchAppPictures", JSON.stringify(pictures));
+
+        renderPictures();
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+
+function renderPictures(){
+
+    const container=document.getElementById("picturesContainer");
+
+    container.innerHTML="";
+
+    pictures.forEach((pic,index)=>{
+
+        const img=document.createElement("img");
+
+        img.src=pic;
+
+        img.style.width="100%";
+
+        img.style.marginBottom="10px";
+
+        container.appendChild(img);
+
+    });
+
+}
+
+
+/* =========================
+   INITIAL LOAD ADDITIONS
+========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    renderJournals();
+
+    renderPictures();
+
+});
+
+/* =========================
+   PASSWORD LOCK
+========================= */
+
+// CHANGE THIS PASSWORD
+const PASSWORD = "bleh";
+
+function checkPassword(){
+
+const input=document.getElementById("passwordInput").value;
+
+if(input===PASSWORD){
+
+document.getElementById("lockScreen").style.display="none";
+
+}
+else{
+
+document.getElementById("wrongPassword").style.display="block";
+
+}
+
+}

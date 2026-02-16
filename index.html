@@ -28,10 +28,12 @@
 <body>
 
 <!-- Bottom Navigation -->
-<div class="bottom-nav">
+<<div class="bottom-nav">
     <button onclick="showView('homeView')">🏠</button>
     <button onclick="showView('notesView')">📝</button>
     <button onclick="showView('linksView')">🔗</button>
+    <button onclick="showView('journalView')">📔</button>
+    <button onclick="showView('picturesView')">📸</button>
 </div>
 
 <!-- Home Page -->
@@ -97,6 +99,32 @@
     <ul id="linksList"></ul>
 </div>
 
+<!-- Journal Page -->
+<div id="journalView" class="view">
+
+    <h2>My Journal 💌</h2>
+
+    <textarea id="journalInput" placeholder="Write your thoughts..."></textarea>
+
+    <button onclick="saveJournal()">Save Entry</button>
+
+    <div id="journalContainer"></div>
+
+</div>
+
+<!-- Pictures Page -->
+<div id="picturesView" class="view">
+
+    <h2>Pretty Girl Gallery 💕</h2>
+
+    <input type="file" id="imageUpload" accept="image/*">
+
+    <button onclick="savePicture()">Save Picture</button>
+
+    <div id="picturesContainer"></div>
+
+</div>
+
 <!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -104,4 +132,24 @@
 <!-- Script -->
 <script src="script.js"></script>
 </body>
+
 </html>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+
+    <div class="lock-box">
+
+        <h2>Enter Password 💕</h2>
+
+        <input type="password" id="passwordInput" placeholder="Password">
+
+        <button onclick="checkPassword()">Unlock</button>
+
+        <p id="wrongPassword" style="color:red; display:none;">
+            Wrong password
+        </p>
+
+    </div>
+
+</div>
