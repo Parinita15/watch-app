@@ -360,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSavedWatches();
     renderNotes();
     renderLinks();
+    renderChecklist();
 });
 
 /* =========================
