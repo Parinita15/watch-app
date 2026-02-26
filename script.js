@@ -515,26 +515,3 @@ renderChecklist();
 
 }
 
-/* =========================
-   PASSWORD LOCK
-========================= */
-
-// CHANGE THIS PASSWORD
-const PASSWORD = "bleh";
-
-function checkPassword(){
-
-const input=document.getElementById("passwordInput").value;
-
-if(input===PASSWORD){
-
-document.getElementById("lockScreen").style.display="none";
-
-}
-else{
-
-document.getElementById("wrongPassword").style.display="block";
-
-}
-
-}
