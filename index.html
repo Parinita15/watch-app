@@ -33,7 +33,7 @@
     <button onclick="showView('notesView')">📝</button>
     <button onclick="showView('linksView')">🔗</button>
     <button onclick="showView('journalView')">📔</button>
-    <button onclick="showView('picturesView')">📸</button>
+    <button onclick="showView('travelView')">🌍</button>
 </div>
 
 <!-- Home Page -->
@@ -112,16 +112,18 @@
 
 </div>
 
-<!-- Pictures Page -->
-<div id="picturesView" class="view">
+<!-- Packing Checklist Page -->
+<div id="travelView" class="view">
 
-    <h2>Pretty Girl Gallery 💕</h2>
+<h2>Packing Checklist 🧳</h2>
 
-    <input type="file" id="imageUpload" accept="image/*">
+<input type="text" id="itemInput" placeholder="Add item">
 
-    <button onclick="savePicture()">Save Picture</button>
+<button onclick="addItem()">Add</button>
 
-    <div id="picturesContainer"></div>
+<button onclick="resetChecklist()">Reset</button>
+
+<div id="checklistContainer"></div>
 
 </div>
 

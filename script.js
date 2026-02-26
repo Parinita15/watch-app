@@ -410,57 +410,6 @@ function renderJournals(){
 
 
 /* =========================
-   PICTURES SYSTEM
-========================= */
-
-let pictures = JSON.parse(localStorage.getItem("watchAppPictures")) || [];
-
-function savePicture(){
-
-    const file=document.getElementById("imageUpload").files[0];
-
-    if(!file) return;
-
-    const reader=new FileReader();
-
-    reader.onload=function(e){
-
-        pictures.push(e.target.result);
-
-        localStorage.setItem("watchAppPictures", JSON.stringify(pictures));
-
-        renderPictures();
-
-    };
-
-    reader.readAsDataURL(file);
-
-}
-
-function renderPictures(){
-
-    const container=document.getElementById("picturesContainer");
-
-    container.innerHTML="";
-
-    pictures.forEach((pic,index)=>{
-
-        const img=document.createElement("img");
-
-        img.src=pic;
-
-        img.style.width="100%";
-
-        img.style.marginBottom="10px";
-
-        container.appendChild(img);
-
-    });
-
-}
-
-
-/* =========================
    INITIAL LOAD ADDITIONS
 ========================= */
 
@@ -470,14 +419,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderPictures();
 
-});
+});renderChecklist();
 
 /* =========================
    PASSWORD LOCK
 ========================= */
 
 // CHANGE THIS PASSWORD
-const PASSWORD = "bleh";
+const PASSWORD = "blehblehbleh";
 
 function checkPassword(){
 
@@ -493,5 +442,97 @@ else{
 document.getElementById("wrongPassword").style.display="block";
 
 }
+
+}
+
+/* =========================
+   PACKING CHECKLIST
+========================= */
+
+let checklist = JSON.parse(localStorage.getItem("packingChecklist")) || [
+
+{ name:"Passport", checked:false },
+
+{ name:"Phone Charger", checked:false },
+
+{ name:"Wallet", checked:false },
+
+{ name:"Headphones", checked:false },
+
+{ name:"Toothbrush", checked:false },
+
+{ name:"Clothes", checked:false }
+
+];
+
+
+function renderChecklist(){
+
+const container=document.getElementById("checklistContainer");
+
+container.innerHTML="";
+
+checklist.forEach((item,index)=>{
+
+const div=document.createElement("div");
+
+div.className="saved-watch-card";
+
+div.innerHTML=`
+
+<input type="checkbox" ${item.checked?"checked":""}
+
+onclick="toggleItem(${index})">
+
+${item.name}
+
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+
+function toggleItem(index){
+
+checklist[index].checked=!checklist[index].checked;
+
+localStorage.setItem("packingChecklist", JSON.stringify(checklist));
+
+}
+
+
+function addItem(){
+
+const input=document.getElementById("itemInput");
+
+if(!input.value.trim()) return;
+
+checklist.push({
+
+name:input.value,
+
+checked:false
+
+});
+
+input.value="";
+
+localStorage.setItem("packingChecklist", JSON.stringify(checklist));
+
+renderChecklist();
+
+}
+
+
+function resetChecklist(){
+
+checklist.forEach(item=>item.checked=false);
+
+localStorage.setItem("packingChecklist", JSON.stringify(checklist));
+
+renderChecklist();
 
 }
