@@ -421,29 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });renderChecklist();
 
-/* =========================
-   PASSWORD LOCK
-========================= */
 
-// CHANGE THIS PASSWORD
-const PASSWORD = "blehblehbleh";
-
-function checkPassword(){
-
-const input=document.getElementById("passwordInput").value;
-
-if(input===PASSWORD){
-
-document.getElementById("lockScreen").style.display="none";
-
-}
-else{
-
-document.getElementById("wrongPassword").style.display="block";
-
-}
-
-}
 
 /* =========================
    PACKING CHECKLIST
@@ -534,5 +512,29 @@ checklist.forEach(item=>item.checked=false);
 localStorage.setItem("packingChecklist", JSON.stringify(checklist));
 
 renderChecklist();
+
+}
+
+/* =========================
+   PASSWORD LOCK
+========================= */
+
+// CHANGE THIS PASSWORD
+const PASSWORD = "bleh";
+
+function checkPassword(){
+
+const input=document.getElementById("passwordInput").value;
+
+if(input===PASSWORD){
+
+document.getElementById("lockScreen").style.display="none";
+
+}
+else{
+
+document.getElementById("wrongPassword").style.display="block";
+
+}
 
 }
